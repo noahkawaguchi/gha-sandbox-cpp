@@ -1,0 +1,50 @@
+name: CI
+
+permissions: { contents: read }
+
+on:
+  push: { branches: [main] }
+  pull_request: { branches: [main] }
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix: { os: [ubuntu-24.04-arm, ubuntu-24.04, macos-26] }
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+
+      - name: Install Nix
+        uses: nixbuild/nix-quick-install-action@v35
+
+      - name: Cache Nix store
+        uses: nix-community/cache-nix-action@v7
+        with:
+          primary-key: >-
+            nix-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('**/*.nix', '**/flake.lock') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-${{ runner.arch }}-
+          # Purge matching prefixes last accessed more than 7 days ago
+          purge: true
+          purge-prefixes: nix-${{ runner.os }}-${{ runner.arch }}-
+          purge-last-accessed: P7D
+
+      - name: Detect Conan profile
+        run: nix develop --command conan profile detect
+
+      - name: Cache Conan packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.conan2/p
+          key: >-
+            conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt', 'flake.lock') }}
+          restore-keys: conan-${{ runner.os }}-${{ runner.arch }}-
+
+      - name: Build the project
+        run: nix develop --command just rebuild
+
+      - name: Run tests
+        run: nix develop --command just test
