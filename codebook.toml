@@ -1,0 +1,17 @@
+words = [
+    "CMAKE",
+    "CXX",
+    "DCMAKE",
+    "EOF",
+    "Werror",
+    "bugprone",
+    "cppcoreguidelines",
+    "ctest",
+    "direnv",
+    "hicpp",
+    "nixos",
+    "nixpkgs",
+    "nullopt",
+    "pkgs",
+]
+ignore_paths = ["flake.lock"]
