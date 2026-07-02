@@ -1,3 +1,7 @@
+####################################################################################################
+# Build lifecycle
+####################################################################################################
+
 # Build the project (default recipe)
 build:
     if ! test -d build; then \
@@ -11,6 +15,17 @@ build:
 # Build and run the main executable
 run: build
     ./build/sandbox
+
+# Full clean rebuild
+rebuild: clean build
+
+# Remove build artifacts
+clean:
+    rm -rf build
+
+####################################################################################################
+# Testing and quality
+####################################################################################################
 
 # Build and run tests
 test: build
@@ -29,10 +44,3 @@ fmt-check:
 # Check spelling with Codebook
 spell-check:
     git ls-files -z | xargs -0 codebook-lsp lint
-
-# Full clean rebuild
-rebuild: clean build
-
-# Remove build artifacts
-clean:
-    rm -rf build
