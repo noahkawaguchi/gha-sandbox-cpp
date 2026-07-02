@@ -27,9 +27,12 @@ clean:
 # Testing and quality
 ####################################################################################################
 
+# Run tests, lints, format checking, and spell checking to match CI
+all-checks: (test '--progress') lint fmt-check spell-check
+
 # Build and run tests
-test: build
-    ctest --test-dir build --output-on-failure
+test *ARGS: build
+    ctest --test-dir build --output-on-failure {{ ARGS }}
 
 # Lint with Clang-Tidy
 lint: build
