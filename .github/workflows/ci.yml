@@ -9,19 +9,22 @@ on:
 
 jobs:
   test:
-    strategy:
+    strategy: &os-matrix
       fail-fast: false
       matrix: { os: [ubuntu-24.04-arm, ubuntu-24.04, macos-26] }
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v7
+      - &checkout
+        uses: actions/checkout@v7
         with: { persist-credentials: false }
 
-      - name: Install Nix
+      - &nix-install
+        name: Install Nix
         uses: nixbuild/nix-quick-install-action@v35
 
-      - name: Cache Nix store
+      - &nix-cache
+        name: Cache Nix store
         uses: nix-community/cache-nix-action@v7
         with:
           primary-key: >-
@@ -32,7 +35,8 @@ jobs:
           purge-prefixes: nix-${{ runner.os }}-${{ runner.arch }}-
           purge-last-accessed: P7D
 
-      - name: Cache Conan packages
+      - &conan-cache
+        name: Cache Conan packages
         uses: actions/cache@v6
         with:
           path: ~/.conan2/p
@@ -44,9 +48,20 @@ jobs:
       - name: Run tests
         run: nix develop --command just test
 
+  lint:
+    strategy: *os-matrix
+    runs-on: ${{ matrix.os }}
+    steps:
+      - *checkout
+      - *nix-install
+      - *nix-cache
+      - *conan-cache
+      - name: Run lints
+        run: nix develop --command just lint
+
   all-checks:
     runs-on: ubuntu-slim
     permissions: {}
-    needs: [test]
+    needs: [test, lint]
     steps:
       - run: echo 'All checks passed!'
