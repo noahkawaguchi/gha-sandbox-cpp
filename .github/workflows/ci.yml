@@ -50,7 +50,7 @@ jobs:
 
       - name: Debug compiler detection
         run: |
-          nix develop --command conan profile show profiles/detect
+          nix develop --command conan profile show -pr:a profiles/detect
           cat build/compile_commands.json
 
   lint:
