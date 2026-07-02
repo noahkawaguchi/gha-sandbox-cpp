@@ -3,7 +3,6 @@ HeaderFilterRegex: .*/(src|tests)/.*\.(h|hpp)
 Checks: >
   bugprone-*,
   cert-*,
-  -cert-err58-cpp,
   clang-analyzer-*,
   concurrency-*,
   cppcoreguidelines-*,
