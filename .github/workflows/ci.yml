@@ -32,15 +32,13 @@ jobs:
           purge-prefixes: nix-${{ runner.os }}-${{ runner.arch }}-
           purge-last-accessed: P7D
 
-      - name: Detect Conan profile
-        run: nix develop --command conan profile detect
-
       - name: Cache Conan packages
         uses: actions/cache@v6
         with:
           path: ~/.conan2/p
           key: >-
-            conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt', 'flake.lock') }}
+            conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt', profiles/**,
+            'flake.lock') }}
           restore-keys: conan-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Run tests
