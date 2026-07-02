@@ -43,8 +43,5 @@ jobs:
             conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt', 'flake.lock') }}
           restore-keys: conan-${{ runner.os }}-${{ runner.arch }}-
 
-      - name: Build the project
-        run: nix develop --command just rebuild
-
       - name: Run tests
         run: nix develop --command just test
