@@ -12,6 +12,7 @@
         {
           default = pkgs.mkShell {
             packages = with pkgs; [
+              bear
               clang-tools
               cmake
               conan

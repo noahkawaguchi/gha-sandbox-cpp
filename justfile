@@ -6,7 +6,7 @@ build:
             -DCMAKE_BUILD_TYPE=Release; \
     fi
 
-    cmake --build build
+    bear -- cmake --build build
 
 # Build and run the main executable
 run: build
