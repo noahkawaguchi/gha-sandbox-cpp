@@ -45,3 +45,10 @@ jobs:
 
       - name: Run tests
         run: nix develop --command just test
+
+  all-checks:
+    runs-on: ubuntu-slim
+    permissions: {}
+    needs: [test]
+    steps:
+      - run: echo 'All checks passed!'
