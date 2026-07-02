@@ -34,7 +34,7 @@ all-checks: (test '--progress') lint fmt-check spell-check
 test *ARGS: build
     ctest --test-dir build --output-on-failure {{ ARGS }}
 
-# Lint with Clang-Tidy
+# Build and lint with Clang-Tidy
 lint: build
     clang-tidy -p build --quiet --use-color --warnings-as-errors='*' \
         $(jq -r '.[].file' build/compile_commands.json | sort -u)
