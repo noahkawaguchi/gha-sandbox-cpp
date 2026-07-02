@@ -1,3 +1,7 @@
+####################################################################################################
+# Build lifecycle
+####################################################################################################
+
 # Build the project (default recipe)
 build:
     if ! test -d build; then \
@@ -12,11 +16,25 @@ build:
 run: build
     ./build/sandbox
 
-# Build and run tests
-test: build
-    ctest --test-dir build --output-on-failure
+# Full clean rebuild
+rebuild: clean build
 
-# Lint with Clang-Tidy
+# Remove build artifacts
+clean:
+    rm -rf build
+
+####################################################################################################
+# Testing and quality
+####################################################################################################
+
+# Run tests, lints, format checking, and spell checking to match CI
+all-checks: (test '--progress') lint fmt-check spell-check
+
+# Build and run tests
+test *ARGS: build
+    ctest --test-dir build --output-on-failure {{ ARGS }}
+
+# Build and lint with Clang-Tidy
 lint: build
     clang-tidy -p build --quiet --use-color --warnings-as-errors='*' \
         $(jq -r '.[].file' build/compile_commands.json | sort -u)
@@ -26,9 +44,6 @@ fmt-check:
     git ls-files -z '*.cpp' '*.hpp' | xargs -0 clang-format --dry-run --Werror \
         && echo 'Formatting check passed'
 
-# Full clean rebuild
-rebuild: clean build
-
-# Remove build artifacts
-clean:
-    rm -rf build
+# Check spelling with Codebook
+spell-check:
+    git ls-files -z | xargs -0 codebook-lsp lint

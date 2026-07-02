@@ -41,8 +41,8 @@ jobs:
         with:
           path: ~/.conan2/p
           key: >-
-            conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt', 'profiles/**',
-            'flake.lock') }}
+            conan-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('conanfile.txt',
+            'profiles/**') }}
           restore-keys: conan-${{ runner.os }}-${{ runner.arch }}-
 
       - name: Run tests
@@ -58,9 +58,27 @@ jobs:
       - name: Run lints
         run: nix develop --command just lint
 
+  fmt-check:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - *checkout
+      - *nix-install
+      - *nix-cache
+      - name: Check formatting
+        run: nix develop --command just fmt-check
+
+  spell-check:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - *checkout
+      - *nix-install
+      - *nix-cache
+      - name: Check spelling
+        run: nix develop --command just spell-check
+
   all-checks:
     runs-on: ubuntu-slim
     permissions: {}
-    needs: [test, lint]
+    needs: [test, lint, fmt-check, spell-check]
     steps:
       - run: echo 'All checks passed!'
