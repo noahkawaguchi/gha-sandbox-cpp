@@ -48,6 +48,11 @@ jobs:
       - name: Run tests
         run: nix develop --command just test
 
+      - name: Debug compiler detection
+        run: |
+          nix develop --command conan profile show profiles/detect
+          cat build/compile_commands.json
+
   lint:
     runs-on: ubuntu-24.04-arm
     steps:
