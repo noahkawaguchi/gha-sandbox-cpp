@@ -5,7 +5,7 @@
 
 namespace math {
 
-auto checked_add(int x, int y) -> std::optional<int> {
+auto checked_add(const int x, const int y) -> std::optional<int> {
   if (y > 0 && x > std::numeric_limits<int>::max() - y) {
     return std::nullopt; // Positive overflow
   }
