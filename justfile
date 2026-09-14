@@ -4,6 +4,7 @@
 
 preset := '--preset conan-release'
 bin-dir := 'build/Release'
+bin := 'sandbox'
 
 ####################################################################################################
 # Build lifecycle
@@ -20,7 +21,7 @@ build:
 
 # Build and run the main executable
 run: build
-    ./{{ bin-dir }}/sandbox
+    ./{{ bin-dir }}/{{ bin }}
 
 # Full clean rebuild
 rebuild: clean build
