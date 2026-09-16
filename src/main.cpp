@@ -35,12 +35,12 @@ auto main() -> int {
   try {
     real_main();
   } catch (const std::exception &e) {
-    std::ignore = std::fputs("fatal: ", stderr);
+    std::ignore = std::fputs("Fatal: ", stderr);
     std::ignore = std::fputs(e.what(), stderr);
     std::ignore = std::fputs("\n", stderr);
     return EXIT_FAILURE;
   } catch (...) {
-    std::ignore = std::fputs("fatal: unknown exception\n", stderr);
+    std::ignore = std::fputs("Fatal: unknown exception\n", stderr);
     return EXIT_FAILURE;
   }
 }
