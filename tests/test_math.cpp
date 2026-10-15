@@ -15,12 +15,12 @@ TEST_CASE("checked_add performs basic arithmetic", "[math]") {
 
 TEST_CASE("checked_add detects positive overflow", "[math]") {
   CHECK_FALSE(checked_add(std::numeric_limits<int>::max(), 1).has_value());
-  CHECK_FALSE(
-    checked_add(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()).has_value());
+  CHECK_FALSE(checked_add(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
+                .has_value());
 }
 
 TEST_CASE("checked_add detects negative overflow", "[math]") {
   CHECK_FALSE(checked_add(std::numeric_limits<int>::min(), -1).has_value());
-  CHECK_FALSE(
-    checked_add(std::numeric_limits<int>::min(), std::numeric_limits<int>::min()).has_value());
+  CHECK_FALSE(checked_add(std::numeric_limits<int>::min(), std::numeric_limits<int>::min())
+                .has_value());
 }

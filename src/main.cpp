@@ -15,10 +15,13 @@ namespace {
 
 void print_sum(const int x, const int y) {
   std::println(
-    "{} + {} = {}", x, y,
-    math::checked_add(x, y).transform([](const int x) -> std::string {
-    return std::to_string(x);
-  }).value_or("nullopt"));
+    "{} + {} = {}",
+    x,
+    y,
+    math::checked_add(x, y)
+      .transform([](const int x) -> std::string { return std::to_string(x); })
+      .value_or("nullopt")
+  );
 }
 
 void real_main() {
